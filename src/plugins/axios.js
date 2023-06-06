@@ -18,7 +18,10 @@ const _axios = axios.create(config);
 
 _axios.interceptors.request.use(
   function(config) {
-    // Do something before request is sent
+    const token = localStorage.getItem('jwt');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
     return config;
   },
   function(error) {
@@ -58,5 +61,3 @@ Plugin.install = function(Vue, options) {
 };
 
 Vue.use(Plugin)
-
-export default Plugin;
