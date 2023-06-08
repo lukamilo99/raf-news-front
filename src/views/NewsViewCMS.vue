@@ -15,7 +15,7 @@
             <a :href="news.link" target="_blank">{{ news.title }}</a>
           </td>
           <td>{{ news.author }}</td>
-          <td>{{ news.date }}</td>
+          <td>{{ news.creationDate }}</td>
           <td>
             <button @click="editNews(news.id)">Edit</button>
             <button @click="deleteNews(news.id)">Delete</button>
@@ -48,9 +48,20 @@ export default {
   },
   methods: {
     fetchNews() {
-      axios.get(`http://localhost:8082/api/news/category/${this.$route.params.categoryId}`)
+      let url = '';
+      if (this.$route.params.categoryId) {
+        url = `http://localhost:8082/api/news/category/${this.$route.params.categoryId}`;
+      } else {
+        url = `http://localhost:8082/api/news`;
+      }
+      axios.get(url)
           .then(response => {
             this.newsList = response.data;
+            this.newsList.forEach(item => {
+              const date = new Date(item.creationDate);
+              item.creationDate = date.toLocaleDateString();
+            });
+            console.log(this.newsList);
           })
           .catch(error => {
             console.log(error);

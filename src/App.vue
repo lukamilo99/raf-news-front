@@ -1,8 +1,8 @@
 <template>
   <div id="app">
     <nav>
-      <router-link to="/">News platform</router-link> |
-      <router-link to="/login">CMS</router-link>
+      <router-link to="/news-platform">News platform</router-link> |
+      <router-link to="/cms">CMS</router-link>
     </nav>
     <router-view/>
   </div>
