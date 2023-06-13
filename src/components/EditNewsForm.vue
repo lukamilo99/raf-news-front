@@ -1,19 +1,30 @@
 <template>
-  <div>
+  <div class="container">
     <h1>Edit News</h1>
     <form @submit.prevent="submitForm">
-      <select v-model="categoryId" required>
-        <option disabled value="">Please select a category</option>
-        <option v-for="category in categories" :key="category.id" :value="category.id">
-          {{ category.name }}
-        </option>
-      </select>
-      <input type="text" v-model="title" placeholder="Title" required>
-      <textarea v-model="content" placeholder="Text" required></textarea>
-      <input type="text" v-model="tags" placeholder="Tags (comma separated)">
-      <button type="submit">Submit</button>
+      <div class="mb-3">
+        <label for="category" class="form-label">Category</label>
+        <select id="category" class="form-select" v-model="categoryId" required>
+          <option v-for="category in categories" :key="category.id" :value="category.id">
+            {{ category.name }}
+          </option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="title" class="form-label">Title</label>
+        <input type="text" id="title" class="form-control" v-model="title" placeholder="Title" required>
+      </div>
+      <div class="mb-3">
+        <label for="content" class="form-label">Text</label>
+        <textarea id="content" class="form-control" v-model="content" placeholder="Text" required></textarea>
+      </div>
+      <div class="mb-3">
+        <label for="tags" class="form-label">Tags</label>
+        <input type="text" id="tags" class="form-control" v-model="tags" placeholder="Tags (comma separated)">
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
     </form>
-    <button @click="$emit('back')">Back</button>
+    <button @click="$emit('back')" class="btn btn-secondary">Back</button>
   </div>
 </template>
 
@@ -27,6 +38,7 @@ export default {
     return {
       categories: [],
       categoryId: '',
+      category: '',
       title: '',
       content: '',
       tags: '',
@@ -34,7 +46,7 @@ export default {
   },
   methods: {
     fetchCategories() {
-      axios.get('http://localhost:8082/api/category/all')
+      axios.get('http://localhost:8082/api/category/public/all')
           .then(response => {
             this.categories = response.data;
           })
@@ -48,6 +60,7 @@ export default {
             const news = response.data;
             this.title = news.title;
             this.content = news.content;
+            this.category = news.category
           })
           .catch(error => {
             console.log(error);
@@ -56,10 +69,18 @@ export default {
     submitForm() {
       const token = localStorage.getItem("jwt")
       const decoded = jwt_decode(token);
+      let tagsArray = [];
+
+      if(this.tags.trim() !== '') {
+        tagsArray = this.tags.split(',').map(tag => tag.trim());
+        tagsArray = tagsArray.filter(tag => tag);
+        tagsArray = [...new Set(tagsArray)];
+      }
+
       const payload = {
         title: this.title,
         content: this.content,
-        tags: this.tags.split(',').map(tag => tag.trim()),
+        tags: tagsArray,
         categoryId: this.categoryId,
         userId: decoded.user
       };

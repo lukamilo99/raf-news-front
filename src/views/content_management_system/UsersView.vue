@@ -1,41 +1,44 @@
 <template>
-  <div class="users">
+  <div class="users container mt-5">
     <h1>Users</h1>
-    <button @click="addUser()">Add new user</button>
-    <div>
-      <table>
-        <tr>
-          <th>Firstname</th>
-          <th>Lastname</th>
-          <th>Username</th>
-          <th>Role</th>
-          <th>Status</th>
-          <th>Action</th>
-        </tr>
-        <tr v-for="user in userList" :key="user.id">
-          <td>{{ user.firstname }}</td>
-          <td>{{ user.lastname }}</td>
-          <td>{{ user.username }}</td>
-          <td>{{ user.role === 1 ? 'Content Creator' : 'Admin' }}</td>
-          <td>{{ user.status ? 'Active' : 'Inactive' }}</td>
-          <td>
-            <button @click="editUser(user.id)">Edit</button>
-            <button @click="toggleUserStatus(user.id)">
-              {{ user.status ? 'Deactivate' : 'Activate' }}
-            </button>
-          </td>
-        </tr>
-      </table>
-    </div>
+    <button class="btn btn-primary mb-3" @click="addUser()">Add new user</button>
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th>Firstname</th>
+        <th>Lastname</th>
+        <th>Username</th>
+        <th>Role</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr v-for="user in userList" :key="user.id">
+        <td>{{ user.firstname }}</td>
+        <td>{{ user.lastname }}</td>
+        <td>{{ user.username }}</td>
+        <td>{{ user.role === 1 ? 'Content Creator' : 'Admin' }}</td>
+        <td>{{ user.status ? 'Active' : 'Inactive' }}</td>
+        <td>
+          <button class="btn btn-warning me-2" @click="editUser(user.id)">Edit</button>
+          <button class="btn btn-primary" @click="toggleUserStatus(user.id)">
+            {{ user.status ? 'Deactivate' : 'Activate' }}
+          </button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
     <NewUserForm v-if="currentView === 'NewUserForm'" @back="currentView = null" @refresh="fetchUsers"/>
     <EditUserForm v-if="currentView === 'EditUserForm'" :user-id="currentUser.id" @back="currentView = null" @refresh="fetchUsers"/>
   </div>
 </template>
 
+
 <script>
 import axios from 'axios';
-import NewUserForm from '../components/NewUserForm.vue';
-import EditUserForm from '../components/EditUserForm.vue';
+import NewUserForm from '../../components/NewUserForm.vue';
+import EditUserForm from '../../components/EditUserForm.vue';
 
 export default {
   name: 'UsersView',

@@ -1,14 +1,20 @@
 <template>
-  <div class="edit-category-form">
-    <h2>Edit category</h2>
-    <form @submit.prevent="submitForm">
-      <label>Category name</label>
-      <input type="text" v-model="category.name" required>
-      <label>Description</label>
-      <textarea v-model="category.description" required></textarea>
-      <button type="submit">Edit</button>
-      <button @click="$emit('back')">Cancel</button>
-    </form>
+  <div class="container">
+    <div class="edit-category-form">
+      <h2>Edit category</h2>
+      <form @submit.prevent="submitForm">
+        <div class="mb-3">
+          <label for="categoryName" class="form-label">Category name</label>
+          <input type="text" class="form-control" id="categoryName" v-model="category.name" required>
+        </div>
+        <div class="mb-3">
+          <label for="categoryDescription" class="form-label">Description</label>
+          <textarea class="form-control" id="categoryDescription" v-model="category.description" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Edit</button>
+        <button @click="$emit('back')" class="btn btn-secondary">Cancel</button>
+      </form>
+    </div>
   </div>
 </template>
 

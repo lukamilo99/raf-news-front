@@ -1,24 +1,31 @@
 <template>
-  <form @submit.prevent="submitForm">
-    <label for="firstname">Firstname:</label>
-    <input id="firstname" v-model="user.firstname" required />
-
-    <label for="lastname">Lastname:</label>
-    <input id="lastname" v-model="user.lastname" required />
-
-    <label for="username">Username:</label>
-    <input id="username" v-model="user.username" required />
-
-    <label for="role">Role:</label>
-    <select id="role" v-model="user.role" required>
-      <option value=2>Admin</option>
-      <option value=1>Content Creator</option>
-    </select>
-
-    <button type="submit">Update</button>
-    <button @click="$emit('back')">Cancel</button>
-  </form>
+  <div class="container">
+    <form @submit.prevent="submitForm">
+      <div class="mb-3">
+        <label for="firstname" class="form-label">Firstname</label>
+        <input id="firstname" class="form-control" v-model="user.firstname" required />
+      </div>
+      <div class="mb-3">
+        <label for="lastname" class="form-label">Lastname</label>
+        <input id="lastname" class="form-control" v-model="user.lastname" required />
+      </div>
+      <div class="mb-3">
+        <label for="username" class="form-label">Username</label>
+        <input id="username" class="form-control" v-model="user.username" required />
+      </div>
+      <div class="mb-3">
+        <label for="role" class="form-label">Role</label>
+        <select id="role" class="form-select" v-model="user.role" required>
+          <option value=2>Admin</option>
+          <option value=1>Content Creator</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary">Update</button>
+      <button @click="$emit('back')" class="btn btn-secondary">Cancel</button>
+    </form>
+  </div>
 </template>
+
 
 <script>
 import axios from 'axios';
