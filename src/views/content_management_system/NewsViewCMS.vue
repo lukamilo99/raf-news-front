@@ -1,15 +1,18 @@
 <template>
-  <div class="news">
+  <div class="news container mt-5">
     <h1>News</h1>
-    <button @click="addNews()">Add new news</button>
+    <button class="btn btn-primary mb-3" @click="addNews()">Add new news</button>
     <div>
-      <table>
+      <table class="table table-striped">
+        <thead>
         <tr>
           <th>Title</th>
           <th>Author</th>
           <th>Date</th>
           <th>Action</th>
         </tr>
+        </thead>
+        <tbody>
         <tr v-for="news in newsList" :key="news.id">
           <td>
             <a :href="news.link" target="_blank">{{ news.title }}</a>
@@ -17,10 +20,11 @@
           <td>{{ news.author }}</td>
           <td>{{ news.creationDate }}</td>
           <td>
-            <button @click="editNews(news.id)">Edit</button>
-            <button @click="deleteNews(news.id)">Delete</button>
+            <button class="btn btn-warning me-2" @click="editNews(news.id)">Edit</button>
+            <button class="btn btn-danger" @click="deleteNews(news.id)">Delete</button>
           </td>
         </tr>
+        </tbody>
       </table>
     </div>
     <NewNewsForm v-if="currentView === 'NewNewsForm'" @back="currentView = null" @refresh="fetchNews"/>
@@ -30,8 +34,8 @@
 
 <script>
 import axios from 'axios';
-import NewNewsForm from '../components/NewNewsForm.vue';
-import EditNewsForm from '../components/EditNewsForm.vue';
+import NewNewsForm from '../../components/NewNewsForm.vue';
+import EditNewsForm from '../../components/EditNewsForm.vue';
 
 export default {
   name: 'NewsView',
@@ -50,18 +54,17 @@ export default {
     fetchNews() {
       let url = '';
       if (this.$route.params.categoryId) {
-        url = `http://localhost:8082/api/news/category/${this.$route.params.categoryId}`;
+        url = `http://localhost:8082/api/news/public/category/${this.$route.params.categoryId}`;
       } else {
-        url = `http://localhost:8082/api/news`;
+        url = `http://localhost:8082/api/news/public/all`;
       }
       axios.get(url)
           .then(response => {
             this.newsList = response.data;
-            this.newsList.forEach(item => {
+            this.newsList = this.newsList.map(item => {
               const date = new Date(item.creationDate);
-              item.creationDate = date.toLocaleDateString();
+              return { ...item, creationDate: date.toDateString() };
             });
-            console.log(this.newsList);
           })
           .catch(error => {
             console.log(error);

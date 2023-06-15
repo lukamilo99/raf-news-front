@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import LoginView from "@/views/LoginView.vue";
 import axios from 'axios';
 
 
@@ -10,10 +9,26 @@ const routes = [
   {
     path: '/login',
     name: 'Login',
+    beforeEnter: (to, from, next) => {
+      if(localStorage.getItem('jwt')) {
+        alert('Already logged in!')
+        next(false);
+      } else {
+        next();
+      }
+    },
     meta: {
       authRequired: false,
     },
-    component: LoginView
+    component: () => import('../views/LoginView.vue')
+  },
+  {
+    path: '/',
+    name: 'WelcomeView',
+    meta: {
+      authRequired: false,
+    },
+    component: () => import('../views/WelcomeView.vue')
   },
   {
     path: '/cms',
@@ -21,7 +36,7 @@ const routes = [
     meta: {
       authRequired: true,
     },
-    component: () => import('../views/CMSView.vue')
+    component: () => import('../views/content_management_system/CMSView.vue')
   }
   ,
   {
@@ -30,7 +45,7 @@ const routes = [
     meta: {
       authRequired: true,
     },
-    component: () => import('../views/CategoriesView.vue')
+    component: () => import('../views/content_management_system/CategoriesView.vue')
   },
   {
     path: '/cms/news/:categoryId',
@@ -38,7 +53,7 @@ const routes = [
     meta: {
       authRequired: true,
     },
-    component: () => import('../views/NewsViewCMS.vue')
+    component: () => import('../views/content_management_system/NewsViewCMS.vue')
   },
   {
     path: '/cms/news',
@@ -46,7 +61,7 @@ const routes = [
     meta: {
       authRequired: true,
     },
-    component: () => import('../views/NewsViewCMS.vue')
+    component: () => import('../views/content_management_system/NewsViewCMS.vue')
   },
   {
     path: '/cms/users',
@@ -55,7 +70,7 @@ const routes = [
       authRequired: true,
       adminRequired: true
     },
-    component: () => import('../views/UsersView.vue')
+    component: () => import('../views/content_management_system/UsersView.vue')
   },
   {
     path: '/news-platform',
@@ -63,7 +78,7 @@ const routes = [
     meta: {
       authRequired: false,
     },
-    component: () => import('../views/NewsPlatformView.vue')
+    component: () => import('../views/news_platform/NewsPlatformView.vue')
   },
   {
     path: '/news-platform/home',
@@ -71,7 +86,7 @@ const routes = [
     meta: {
       authRequired: false,
     },
-    component: () => import('../views/HomeView.vue')
+    component: () => import('../views/news_platform/HomeView.vue')
   },
   {
     path: '/news-platform/trending',
@@ -79,7 +94,7 @@ const routes = [
     meta: {
       authRequired: false,
     },
-    component: () => import('../views/TrendingView.vue')
+    component: () => import('../views/news_platform/TrendingView.vue')
   },
   {
     path: '/news-platform/category/:categoryId',
@@ -87,7 +102,7 @@ const routes = [
     meta: {
       authRequired: false,
     },
-    component: () => import('../views/NewsViewNP.vue')
+    component: () => import('../views/news_platform/NewsViewNP.vue')
   },
   {
     path: '/news-platform/news/:newsId',
@@ -95,7 +110,15 @@ const routes = [
     meta: {
       authRequired: false,
     },
-    component: () => import('../views/NewsDetailsView.vue')
+    component: () => import('../views/news_platform/NewsDetailsView.vue')
+  },
+  {
+    path: '/news-platform/tag/:tagId',
+    name: 'NewsPlatformTags',
+    meta: {
+      authRequired: false,
+    },
+    component: () => import('../views/news_platform/TagView.vue')
   },
   {
     path: '/access-denied',

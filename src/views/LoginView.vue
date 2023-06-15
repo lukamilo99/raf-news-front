@@ -26,9 +26,9 @@ export default {
         password: this.password,
       }).then(response => {
         localStorage.setItem('jwt', response.data.jwt)
-        this.$router.push('/cms');
+        this.$router.push('/cms')
       }).catch(error => {
-            console.log(error);
+            console.log(error)
           })
     }
   }

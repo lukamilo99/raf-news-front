@@ -1,26 +1,28 @@
 <template>
-  <div class="categories">
+  <div class="categories container mt-5">
     <h1>Categories</h1>
-    <button @click="addCategory()">Add new category</button>
-    <div>
-      <table>
-        <tr>
-          <th>Name</th>
-          <th>Description</th>
-          <th>Action</th>
-        </tr>
-        <tr v-for="category in categories" :key="category.id">
-          <td>
-            <router-link :to="{ name: 'News', params: { categoryId: category.id } }">{{ category.name }}</router-link>
-          </td>
-          <td>{{ category.description }}</td>
-          <td>
-            <button @click="editCategory(category.id)">Edit</button>
-            <button @click="deleteCategory(category.id)">Delete</button>
-          </td>
-        </tr>
-      </table>
-    </div>
+    <button class="btn btn-primary mb-3" @click="addCategory()">Add new category</button>
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Action</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr v-for="category in categories" :key="category.id">
+        <td>
+          <router-link :to="{ name: 'News', params: { categoryId: category.id } }">{{ category.name }}</router-link>
+        </td>
+        <td>{{ category.description }}</td>
+        <td>
+          <button class="btn btn-warning me-2" @click="editCategory(category.id)">Edit</button>
+          <button class="btn btn-danger" @click="deleteCategory(category.id)">Delete</button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
     <NewCategoryForm v-if="currentView === 'NewCategoryForm'" @back="currentView = null" @refresh="fetchCategories"/>
     <EditCategoryForm v-if="currentView === 'EditCategoryForm'" :category-id="currentCategoryId" @back="currentView = null" @refresh="fetchCategories"/>
   </div>
@@ -28,8 +30,8 @@
 
 <script>
 import axios from 'axios';
-import NewCategoryForm from '../components/NewCategoryForm.vue';
-import EditCategoryForm from '../components/EditCategoryForm.vue';
+import NewCategoryForm from '../../components/NewCategoryForm.vue';
+import EditCategoryForm from '../../components/EditCategoryForm.vue';
 
 export default {
   name: 'CategoriesView',
@@ -46,7 +48,7 @@ export default {
   },
   methods: {
     fetchCategories() {
-      axios.get('http://localhost:8082/api/category/all')
+      axios.get('http://localhost:8082/api/category/public/all')
           .then(response => {
             this.categories = response.data;
           })

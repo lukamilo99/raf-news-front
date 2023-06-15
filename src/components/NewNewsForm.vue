@@ -1,18 +1,31 @@
 <template>
-  <div>
+  <div class="container">
     <h1>Add New News</h1>
     <form @submit.prevent="submitForm">
-      <input type="text" v-model="title" placeholder="Title" required>
-      <select v-model="selectedCategory">
-        <option v-for="category in categories" :key="category.id" :value="category.id">
-          {{ category.name }}
-        </option>
-      </select>
-      <textarea v-model="content" placeholder="Text" required></textarea>
-      <input type="text" v-model="tags" placeholder="Tags (comma separated)">
-      <button type="submit">Submit</button>
+      <div class="mb-3">
+        <label for="title" class="form-label">Title</label>
+        <input id="title" type="text" v-model="title" class="form-control" placeholder="Title" required>
+      </div>
+      <div class="mb-3">
+        <label for="category" class="form-label">Category</label>
+        <select id="category" class="form-select" v-model="selectedCategory">
+          <option value="" disabled selected>Select a category</option>
+          <option v-for="category in categories" :key="category.id" :value="category.id">
+            {{ category.name }}
+          </option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="content" class="form-label">Content</label>
+        <textarea id="content" class="form-control" v-model="content" placeholder="Text" required></textarea>
+      </div>
+      <div class="mb-3">
+        <label for="tags" class="form-label">Tags</label>
+        <input id="tags" type="text" class="form-control" v-model="tags" placeholder="Tags (comma separated)">
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
     </form>
-    <button @click="$emit('back')">Back</button>
+    <button @click="$emit('back')" class="btn btn-secondary">Back</button>
   </div>
 </template>
 
@@ -35,7 +48,7 @@ export default {
   },
   methods: {
     fetchCategories() {
-      axios.get('http://localhost:8082/api/category/all')
+      axios.get('http://localhost:8082/api/category/public/all')
           .then(response => {
             this.categories = response.data;
           })
@@ -46,10 +59,18 @@ export default {
     submitForm() {
       const token = localStorage.getItem('jwt');
       const decoded = jwt_decode(token);
+      let tagsArray = [];
+
+      if(this.tags.trim() !== '') {
+        tagsArray = this.tags.split(',').map(tag => tag.trim());
+        tagsArray = tagsArray.filter(tag => tag);
+        tagsArray = [...new Set(tagsArray)];
+      }
+
       let payload = {
         title: this.title,
         content: this.content,
-        tags: this.tags.split(',').map(tag => tag.trim()),
+        tags: tagsArray,
         categoryId: this.selectedCategory,
         userId: decoded.user
       };
@@ -69,5 +90,4 @@ export default {
 </script>
 
 <style scoped>
-/* Add styles here */
 </style>
