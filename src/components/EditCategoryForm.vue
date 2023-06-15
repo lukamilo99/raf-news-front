@@ -34,14 +34,12 @@ export default {
   },
   methods: {
     fetchCategory() {
-      axios
-          .get(`http://localhost:8082/api/category/${this.categoryId}`)
+      axios.get(`http://localhost:8082/api/category/${this.categoryId}`)
           .then((response) => (this.category = response.data))
           .catch((error) => console.error(error));
     },
     submitForm() {
-      axios
-          .put(`http://localhost:8082/api/category/${this.categoryId}`, this.category)
+      axios.put(`http://localhost:8082/api/category/${this.categoryId}`, this.category)
           .then(() => {
             this.$emit('back');
             this.$emit('refresh');

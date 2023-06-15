@@ -9,13 +9,14 @@
       <div class="mb-3">
         <label for="category" class="form-label">Category</label>
         <select id="category" class="form-select" v-model="selectedCategory">
+          <option value="" disabled selected>Select a category</option>
           <option v-for="category in categories" :key="category.id" :value="category.id">
             {{ category.name }}
           </option>
         </select>
       </div>
       <div class="mb-3">
-        <label for="content" class="form-label">Text</label>
+        <label for="content" class="form-label">Content</label>
         <textarea id="content" class="form-control" v-model="content" placeholder="Text" required></textarea>
       </div>
       <div class="mb-3">
@@ -58,10 +59,18 @@ export default {
     submitForm() {
       const token = localStorage.getItem('jwt');
       const decoded = jwt_decode(token);
+      let tagsArray = [];
+
+      if(this.tags.trim() !== '') {
+        tagsArray = this.tags.split(',').map(tag => tag.trim());
+        tagsArray = tagsArray.filter(tag => tag);
+        tagsArray = [...new Set(tagsArray)];
+      }
+
       let payload = {
         title: this.title,
         content: this.content,
-        tags: this.tags.split(',').map(tag => tag.trim()),
+        tags: tagsArray,
         categoryId: this.selectedCategory,
         userId: decoded.user
       };
@@ -81,5 +90,4 @@ export default {
 </script>
 
 <style scoped>
-/* Add styles here */
 </style>

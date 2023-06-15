@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div class="text-center mt-5">
-      <h1>CMS Dashboard</h1>
+      <h1>Content Management System</h1>
     </div>
     <div class="container mt-5">
       <div class="row justify-content-center">

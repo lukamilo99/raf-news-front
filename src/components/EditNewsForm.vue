@@ -5,6 +5,7 @@
       <div class="mb-3">
         <label for="category" class="form-label">Category</label>
         <select id="category" class="form-select" v-model="categoryId" required>
+          <option value="" disabled selected>Select a category</option>
           <option v-for="category in categories" :key="category.id" :value="category.id">
             {{ category.name }}
           </option>
@@ -15,7 +16,7 @@
         <input type="text" id="title" class="form-control" v-model="title" placeholder="Title" required>
       </div>
       <div class="mb-3">
-        <label for="content" class="form-label">Text</label>
+        <label for="content" class="form-label">Content</label>
         <textarea id="content" class="form-control" v-model="content" placeholder="Text" required></textarea>
       </div>
       <div class="mb-3">
@@ -104,5 +105,4 @@ export default {
 </script>
 
 <style scoped>
-/* Add styles here */
 </style>

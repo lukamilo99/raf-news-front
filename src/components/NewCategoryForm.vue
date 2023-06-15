@@ -32,8 +32,7 @@ export default {
   },
   methods: {
     submitForm() {
-      axios
-          .post('http://localhost:8082/api/category', this.category)
+      axios.post('http://localhost:8082/api/category', this.category)
           .then(() => {
             this.$emit('back');
             this.$emit('refresh');
